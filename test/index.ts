@@ -1,32 +1,41 @@
-import { createServer } from 'http';
-import bootstrap, { Module, Controller} from '../src/index'
+import { Module, Controller, create } from '../dist/index';
 
 @Controller('/a')
 class A {
     use(ctx: any) {
-        console.log(ctx)
-        ctx.body = '123'
+        ctx.body = 'this is a';
+        console.log(ctx);
     }
 }
 
 @Controller('/b')
 class B {
     use(ctx: any) {
-        ctx.body = 'this is b'
+        ctx.body = 'this is b';
+    }
+}
+
+@Controller()
+class Index {
+    use(ctx: any, next: any) {
+        ctx.body = 'index';
+        return next();
     }
 }
 
 @Module({
-    controllers: [A, B]
+    controllers: [Index, A, B]
 })
 class App {}
 
+const app = create(App);
+// const handle = bootstrap(App);
+// const server = createServer(function (req, res) {
+//     handle(req, res);
+// });
 
-const handle = bootstrap(App)
-const server = createServer(function(req, res) {
-    handle(req, res)
-})
+// console.log(app.controllers)
 
-server.listen(8888 ,() => {
-    console.log(`server start at http://localhost:8888/`)
-})
+app.listen(8888, () => {
+    console.log(`server start at http://localhost:8888/`);
+});
