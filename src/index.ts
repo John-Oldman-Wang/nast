@@ -4,11 +4,18 @@ import RootProcess from './rootProcess';
 
 export { default as RootProcess } from './rootProcess';
 export * from './decorators/index';
-export default function bootstrap(appModule: Function) {
+export * from './rootProcess';
+
+export function create<T extends Function>(appModule: T) {
     const providers: Provider[] = Reflect.getMetadata('providers', appModule) || [];
     const controllers: FunctionConstructor[] = Reflect.getMetadata('controllers', appModule) || [];
-    const defaultInjector = ReflectiveInjector.resolveAndCreate([RootProcess])
-    const rootInjector = ReflectiveInjector.resolveAndCreate([...providers], defaultInjector);
+    const rootInjector = ReflectiveInjector.resolveAndCreate([...providers, RootProcess]);
     const rootProcess: RootProcess = rootInjector.get(RootProcess);
-    return rootProcess.callBack(controllers);
+    rootProcess.useController(...controllers)
+    return rootProcess;
+}
+
+export default function bootstrap(appModule: Function) {
+    const rootProcess = create(appModule);
+    return rootProcess.callback();
 }

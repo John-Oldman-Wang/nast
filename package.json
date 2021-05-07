@@ -1,10 +1,13 @@
 {
-  "name": "nast",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@de-pa/nast",
+  "version": "0.0.1",
+  "description": "server http koa",
   "main": "index.js",
   "scripts": {
+    "build": "npm run tsc&&npm run copy",
     "dev": "nodemon",
+    "tsc": "tsc",
+    "copy": "copyfiles -f package.json dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,14 +21,21 @@
     "url": "https://github.com/nokisnojok/nast/issues"
   },
   "homepage": "https://github.com/nokisnojok/nast#readme",
-  "dependencies": {
-    "@types/node": "^14.14.31",
-    "koa": "^2.13.0",
+  "peerDependencies": {
+    "@types/koa": "^2.13.1",
+    "koa": "^2.13.1",
+    "injection-js": "^2.3.2",
     "reflect-metadata": "^0.1.13"
   },
+  "dependencies": {
+    "@types/node": "^14.14.31"
+  },
   "devDependencies": {
+    "@types/koa": "^2.13.1",
+    "copyfiles": "^2.4.1",
     "husky": "^4.3.0",
     "injection-js": "^2.3.2",
+    "koa": "^2.13.1",
     "mocha": "^8.1.3",
     "nodemon": "^2.0.4",
     "prettier": "^2.1.2",

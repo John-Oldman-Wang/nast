@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es5",
+    "target": "es6",
     "lib": ["es5", "es2016", "es2017", "DOM"],
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "outDir": "./bundles",
+    "outDir": "./dist",
     "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
