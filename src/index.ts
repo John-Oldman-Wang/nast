@@ -1,18 +1,21 @@
 import 'reflect-metadata';
 import { Server } from 'http';
 import { Provider, ReflectiveInjector } from 'injection-js';
-import RootProcess from './rootProcess';
+import NistApplication from './application';
 
-export { default as RootProcess } from './rootProcess';
+export { default as Application } from './application';
 export * from './decorators/index';
-export * from './rootProcess';
+export * from './application';
+export interface Type<T = any> extends Function {
+    new (...args: any[]): T;
+}
 
-export function create<T extends Function>(appModule: T) {
-    const providers: Provider[] = Reflect.getMetadata('providers', appModule) || [];
-    const controllers: FunctionConstructor[] = Reflect.getMetadata('controllers', appModule) || [];
+export function create(AppModule: Type) {
+    const providers: Provider[] = Reflect.getMetadata('providers', AppModule) || [];
+    const controllers: Type[] = Reflect.getMetadata('controllers', AppModule) || [];
     const rootInjector = ReflectiveInjector.resolveAndCreate([
         ...providers,
-        RootProcess,
+        NistApplication,
         {
             provide: Server,
             useFactory: function () {
@@ -20,7 +23,13 @@ export function create<T extends Function>(appModule: T) {
             }
         }
     ]);
-    const rootProcess: RootProcess = rootInjector.get(RootProcess);
-    rootProcess.useController(...controllers);
-    return rootProcess;
+    const application: NistApplication = rootInjector.get(NistApplication);
+    application.useController(...controllers);
+    const appInjector = ReflectiveInjector.resolveAndCreate([AppModule], rootInjector);
+    // life circle
+    const app = appInjector.get(AppModule);
+    if (typeof app?.init === 'function') {
+        app.init();
+    }
+    return application;
 }
