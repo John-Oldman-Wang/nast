@@ -1,5 +1,7 @@
 import { Injectable, Injector, ReflectiveInjector } from 'injection-js';
 import Application, { Context } from 'koa';
+import { Server } from 'http';
+import { ListenOptions } from 'net';
 
 export { Context } from 'koa';
 
@@ -17,6 +19,17 @@ function noopMiddleware(ctx: Context, next: Function) {
 const noopController = {
     use: noopMiddleware
 };
+
+type listenArgs =
+    | [port?: number, hostname?: string, backlog?: number, listeningListener?: () => void]
+    | [port?: number, hostname?: string, listeningListener?: () => void]
+    | [port?: number, backlog?: number, listeningListener?: () => void]
+    | [port?: number, listeningListener?: () => void]
+    | [path: string, backlog?: number, listeningListener?: () => void]
+    | [path: string, listeningListener?: () => void]
+    | [options: ListenOptions, listeningListener?: () => void]
+    | [handle: any, backlog?: number, listeningListener?: () => void]
+    | [handle: any, listeningListener?: () => void];
 
 @Injectable()
 export default class RootProcess extends Application {
@@ -49,6 +62,13 @@ export default class RootProcess extends Application {
         };
 
         return handleRequest;
+    }
+
+    listen(...args: listenArgs) {
+        const server: Server = this.injector.get(Server);
+        server.addListener('request', this.callback());
+        server.listen(...args);
+        return server;
     }
 
     composeControllers(controllers: FunctionConstructor[]) {

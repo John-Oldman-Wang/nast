@@ -1,6 +1,6 @@
 {
   "name": "@de-pa/nast",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "server http koa",
   "main": "index.js",
   "scripts": {
@@ -41,6 +41,10 @@
     "prettier": "^2.1.2",
     "reflect-metadata": "^0.1.13",
     "ts-node": "^9.1.1",
-    "typescript": "^4.0.5"
+    "typescript": "^4.0.5",
+    "@types/websocket": "^1.0.2",
+    "@types/ws": "^7.4.4",
+    "websocket": "^1.0.34",
+    "ws": "^7.4.6"
   }
 }
