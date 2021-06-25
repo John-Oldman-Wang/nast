@@ -32,7 +32,7 @@ type listenArgs =
     | [handle: any, listeningListener?: () => void];
 
 @Injectable()
-export default class RootProcess extends Application {
+export default class NistApplication extends Application {
     controllers: Array<any> = [];
     constructor(public injector: Injector) {
         super();

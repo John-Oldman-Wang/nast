@@ -1,3 +1,4 @@
+import { Injector } from 'injection-js';
 import { Module, Controller, create } from '../src/index';
 // import WebSocketServerWrap from './service/WebSocketServerWrap';
 import WebSocketServerWrap from './service/WsServerWrap';
@@ -6,7 +7,7 @@ import WebSocketServerWrap from './service/WsServerWrap';
 class A {
     use(ctx: any) {
         ctx.body = 'this is a';
-        console.log(ctx);
+        // console.log(ctx);
     }
 }
 
@@ -31,15 +32,14 @@ class Index {
     controllers: [Index, A, B],
     providers: [WebSocketServerWrap]
 })
-class App {}
+class App {
+    constructor(public injector: Injector) {}
+    init() {
+        this.injector.get(WebSocketServerWrap)
+    }
+}
 
 const app = create(App);
-// const handle = bootstrap(App);
-// const server = createServer(function (req, res) {
-//     handle(req, res);
-// });
-
-// console.log(app.controllers)
 
 app.listen(8888, () => {
     console.log(`server start at http://localhost:8888/`);
